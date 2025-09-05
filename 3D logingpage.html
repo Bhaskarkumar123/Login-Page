@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Cube Login Page</title>
+  <title>3D Login Page with Lord Ganesha</title>
   <style>
     body {
       margin: 0;
@@ -11,45 +11,76 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: radial-gradient(circle at center, #0f0c29, #302b63, #24243e);
+      background: linear-gradient(135deg, #141E30, #243B55);
       font-family: 'Poppins', sans-serif;
       overflow: hidden;
     }
 
-    .scene {
-      width: 320px;
-      height: 320px;
+    .wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 900px;
+      max-width: 95%;
       perspective: 1000px;
     }
 
-    .cube {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transform: rotateY(0deg);
-      transition: transform 1s ease-in-out;
+    /* Left: Illustration (Lord Ganesha) */
+    .illustration {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .face {
+    .illustration img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 50%; /* Makes it a circle */
+      border: 5px solid #fff; /* White border around circle */
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* Right: 3D Card with flipping */
+    .card {
+      flex: 1;
+      margin-left: 40px;
+      width: 100%;
+      height: 400px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s ease-in-out;
+    }
+
+    .card.flip {
+      transform: rotateY(180deg);
+    }
+
+    .side {
       position: absolute;
       width: 100%;
       height: 100%;
       background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 15px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 25px 45px rgba(0,0,0,0.5);
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 25px;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
     }
 
-    .face h2 {
+    .side h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      letter-spacing: 1px;
     }
 
     .input-box {
@@ -60,11 +91,12 @@
       width: 100%;
       padding: 12px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       outline: none;
       font-size: 15px;
       color: #fff;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 3px 8px rgba(0,0,0,0.4);
     }
 
     .input-box input::placeholder {
@@ -75,76 +107,73 @@
       width: 100%;
       padding: 12px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 15px;
+      font-size: 16px;
       margin-top: 10px;
       color: #fff;
       background: linear-gradient(90deg, #ff9966, #ff5e62);
-      transition: 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
     .btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
     }
 
-    .switch {
-      text-align: center;
+    .extra {
       margin-top: 15px;
-      font-size: 14px;
+      text-align: center;
     }
 
-    .switch a {
+    .extra a {
       color: #00f7ff;
       cursor: pointer;
       text-decoration: none;
     }
 
-    /* Position cube faces */
-    .front  { transform: rotateY(0deg) translateZ(160px); }
-    .back   { transform: rotateY(180deg) translateZ(160px); }
-    .right  { transform: rotateY(90deg) translateZ(160px); }
-    .left   { transform: rotateY(-90deg) translateZ(160px); }
-
+    /* Back side for Forgot Password */
+    .back {
+      transform: rotateY(180deg);
+    }
   </style>
 </head>
 <body>
-  <div class="scene">
-    <div class="cube" id="cube">
+  <div class="wrapper">
+    <!-- 2D Illustration (Lord Ganesha Circle Image) -->
+    <div class="illustration">
+       <img src="image/ganesha.jpg" alt="Lord Ganesha">
+    </div>
+
+    <!-- 3D Card -->
+    <div class="card" id="card">
       <!-- Front: Login -->
-      <div class="face front">
+      <div class="side front">
         <h2>Login</h2>
         <form>
           <div class="input-box">
-            <input type="text" placeholder="Username" required>
+            <input type="text" placeholder="Username" maxlength="15" required>
           </div>
           <div class="input-box">
-            <input type="password" placeholder="Password" required>
+            <input type="password" placeholder="Password" maxlength="8" required>
           </div>
           <button type="submit" class="btn">Login</button>
-          <div class="switch">
-            New here? <a onclick="rotateCube('right')">Sign Up</a>
+          <div class="extra">
+            <a onclick="flipCard()">Forgot Password?</a>
           </div>
         </form>
       </div>
 
-      <!-- Right: Signup -->
-      <div class="face right">
-        <h2>Sign Up</h2>
+      <!-- Back: Forgot Password -->
+      <div class="side back">
+        <h2>Forgot Password</h2>
         <form>
           <div class="input-box">
-            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Enter your email" required>
           </div>
-          <div class="input-box">
-            <input type="email" placeholder="Email" required>
-          </div>
-          <div class="input-box">
-            <input type="password" placeholder="Password" required>
-          </div>
-          <button type="submit" class="btn">Sign Up</button>
-          <div class="switch">
-            Already a member? <a onclick="rotateCube('front')">Login</a>
+          <button type="submit" class="btn">Reset Password</button>
+          <div class="extra">
+            <a onclick="flipCard()">Back to Login</a>
           </div>
         </form>
       </div>
@@ -152,14 +181,9 @@
   </div>
 
   <script>
-    const cube = document.getElementById("cube");
-
-    function rotateCube(side) {
-      if (side === "right") {
-        cube.style.transform = "rotateY(-90deg)";
-      } else if (side === "front") {
-        cube.style.transform = "rotateY(0deg)";
-      }
+    const card = document.getElementById("card");
+    function flipCard() {
+      card.classList.toggle("flip");
     }
   </script>
 </body>
